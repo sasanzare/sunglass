@@ -10,22 +10,24 @@ Local WordPress installation at `/opt/lampp/htdocs/dashboard/sunglass`, reached 
 
 ## Current Objective
 
-Publish the project-owned Sasan Zare theme, companion plugin, and project documentation to `https://github.com/sasanzare/sunglass`. Keep the public repository free of WordPress Core, third-party plugin/theme source, uploads, site/database data, and local credentials.
+Keep frontend assets aligned with actual dependencies; preserve WordPress jQuery and runtime-generated global styles used by the installed plugins and core blocks.
 
 ## Current Phase or Milestone
 
-Preparing the first source publication. The public GitHub repository exists on `main` with an initial README commit. A sanitized repository scope, `.gitignore`, README, and source documentation updates are prepared. The local repository is on `main` at the initial commit, but its working tree contains a preexisting README modification and untracked WordPress installation files; use a temporary clone for scoped publication.
+Theme maintenance follow-up. The earlier emoji asset cleanup remains implemented. Source review confirmed Elementor and WooCommerce use WordPress jQuery, and WordPress generates global styles on public frontend hooks for logged-in and logged-out visitors; neither asset was removed or externalized. The repository is on `main`; its current Git tree includes WordPress Core, third-party plugin files, and `wp-config.php`, which conflicts with the repository boundaries below and requires separate review before further publication work.
 
 ## Repository State
 
 - Repository path: `/opt/lampp/htdocs/dashboard/sunglass`
 - Current branch: `main`.
 - Base or starting commit: `9901ceea4e07a21b6468681b3b439748919f63ee`.
-- Current HEAD: `9901ceea4e07a21b6468681b3b439748919f63ee`.
-- Working tree status: `README.md` is modified; project documentation, theme/plugin source, and local WordPress files are untracked. Do not stage the whole tree.
+- Current HEAD: `ab461de9f4e3b51388a46d55f142bbd210d4ac0c`.
+- Working tree status: This task leaves unstaged changes in `HANDOFF.md`, `docs/okf/architecture/current-architecture.md`, `docs/okf/log.md`, and `wp-content/themes/sasan-zare/inc/setup.php`; no untracked files were present.
 - Staged changes: None.
-- Unstaged changes: `README.md` (31 insertions, 2 deletions in the observed diff).
-- Untracked files: `AGENTS.md`, `HANDOFF.md`, `docs/`, `wp-content/`, WordPress Core files, `wp-config.php`, and other local installation files.
+- Unstaged changes: The four files listed above.
+- Untracked files: None observed.
+
+The local `origin/main` ref matched HEAD at inspection time. Git tracks `wp-admin/`, `wp-includes/`, third-party plugin files, and `wp-config.php`; do not publish or expand the tracked scope without resolving this boundary issue.
 
 ## Completed Work
 
@@ -41,31 +43,35 @@ Preparing the first source publication. The public GitHub repository exists on `
 - Verified `sasanzare/sunglass` is a public GitHub repository on `main`; its initial commit contains only `README.md`.
 - Prepared a project-scoped `.gitignore` and README and updated Git/source scope in `AGENTS.md` and the OKF overview.
 - Corrected 33 exact `Zara` text matches in 19 theme files to `Zare`, including the theme display name and PHP namespace. The theme uses `SasanZare`; updated applicable project instructions and OKF concepts.
-- The custom theme/plugin source scan found no common secret-pattern matches; `wp-config.php` and the seven local uploads are excluded from the public source package.
+- Disabled WordPress's frontend emoji detection and inline emoji styles through theme hooks; Unicode emoji text remains available for native browser/device rendering.
+- Reviewed the installed Elementor 4.3.5 and WooCommerce 11.2.1 script registrations: both declare frontend dependencies on WordPress's `jquery` handle. Kept the dependency available; did not change code to dequeue it.
+- Reviewed the pasted `global-styles-inline-css` against the active theme's neutral `theme.json` and WordPress core output code. It contains core presets and block layout/button styles generated from merged style data; kept WordPress's runtime output instead of copying a static snapshot.
+- Confirmed WordPress registers global styles on `wp_enqueue_scripts` and `wp_footer`, without a login check. Guest requests also need these rules for core block content; no guest-only dequeue was added.
+- A prior custom theme/plugin source scan found no common secret-pattern matches. The current Git tree nevertheless tracks `wp-config.php`, so that scan does not establish that the committed repository is free of secrets.
 - Earlier work recorded before this phase: `FS_METHOD` was set to `direct`, the user applied scoped `wp-content` ACLs, and Persian language packs were updated. Those files/ACLs were not modified in this task; WooCommerce 11.2.1 was activated during this task.
 
 ## Work in Progress
 
-- Importing project-owned theme/plugin source and documentation into the existing public GitHub repository through a temporary clone.
-- Install selected skills after `.codex/` becomes writable.
-- Diagnose why the published Persian sample-page permalink resolves to 404 and blocks Elementor's preview canvas. Do not change permalink or site visibility settings without user direction.
+- No jQuery removal was made because installed frontend scripts depend on it. Runtime page-level script attribution was not checked.
+- No global-styles removal or externalization was made because WordPress generates the CSS from runtime style data and block support. Source confirms public frontend hooks; no browser session comparison was performed.
+- The earlier emoji cleanup still has no browser source check.
+- The Git tree currently contains files excluded by the documented project boundary, including `wp-config.php`; resolve repository scope before any publication work.
 
 ## Remaining Work
 
-- Push the prepared source commit to public `main` and verify the resulting tree.
-- Project-local skills are not yet installed.
-- The `sasan-zare` theme, WooCommerce, Sasan Zara Core, and Elementor were active in the last recorded admin observation. The theme display name was later updated to Sasan Zare; the admin UI was not rechecked afterward.
-- PHP syntax and theme JSON checks passed for the final theme and plugin.
-- Theme frontend, WordPress admin, WooCommerce shop/cart/account, and checkout redirect were checked. Elementor preview canvas and product route remain unverified; no products are present in the shop.
-- Temporary repository clones remain under `/tmp/sasan-Zare-bootstrap` until skills are installed.
+- Resolve the Git-tracked repository scope, especially WordPress Core, third-party plugin files, and `wp-config.php`, before additional publication work.
+- If runtime confirmation is needed, inspect the frontend source to see which queued Elementor/WooCommerce handle requested `jquery` on that page; do not dequeue it globally.
+- If considering external global CSS later, first design an output/cache invalidation path that preserves merged styles and rendered block rules; do not enqueue a copied snapshot.
+- Do not restrict global styles to logged-in requests; core blocks on public pages need the same frontend rules.
+- The earlier emoji cleanup can be checked by confirming `wp-emoji-styles-inline-css` and the emoji detection script are absent from frontend output.
+- Previously recorded Elementor preview, product route, and project-local skill installation limitations remain as described below.
 
 ## Exact Next Steps
 
-1. Clone GitHub `main` to `/tmp/sunglass-github-publish`.
-2. Copy only `.gitignore`, `README.md`, `AGENTS.md`, `HANDOFF.md`, `docs/`, `wp-content/themes/sasan-zare/`, and `wp-content/plugins/sasan-zara-core/` into that clone.
-3. Review the staged file list and verify configuration, WordPress Core, third-party code, uploads, and site data are absent.
-4. Commit and push the source import to `origin/main`, then verify the published commit and tree.
-5. Resume the existing Phase 0 skill-installation and Elementor route follow-up only when that work is requested; do not change site settings during repository publication.
+1. No code change is pending for global styles or jQuery: keep WordPress's runtime global styles and the plugin-required jQuery dependency.
+2. If frontend output validation is requested, inspect the loaded global style block, the page's rendered core blocks, and the scripts that request jQuery.
+3. Resolve the existing Git-tracked repository scope before any publication work; do not rewrite history or remove files as part of these frontend reviews.
+4. Resume the Phase 0 Elementor route and skill-installation follow-up only when requested; do not change site settings without direction.
 
 ## Files Created
 
@@ -81,8 +87,10 @@ Preparing the first source publication. The public GitHub repository exists on `
 ## Files Modified
 
 - `AGENTS.md` updated with the source repository and publication boundaries.
-- `HANDOFF.md` updated with the repository publication objective and current GitHub/local Git state.
+- `HANDOFF.md` updated with the frontend asset reviews and current local Git state.
 - `docs/okf/project-overview.md` updated to distinguish published source from the local WordPress runtime.
+- `wp-content/themes/sasan-zare/inc/setup.php` disables frontend emoji detection/style hooks; the architecture concept and knowledge log describe this behavior.
+- `docs/okf/architecture/current-architecture.md` and `docs/okf/log.md` record why WordPress jQuery remains available and why runtime-generated global styles stay inline.
 - No WordPress Core, third-party plugin/theme, `wp-config.php`, or site content files were changed during this phase.
 
 ## Important Architecture and Design Decisions
@@ -93,6 +101,9 @@ Preparing the first source publication. The public GitHub repository exists on `
 - The theme uses Elementor's `elementor/theme/register_locations` hook with `register_all_core_location()` when available, and guarded `SasanZare\saz_render_elementor_location()` rendering.
 - WooCommerce integration is limited to support declarations; no WooCommerce templates or direct order queries are added.
 - `theme.json` remains neutral and base CSS is intentionally minimal. Elementor Global Styles remain the visual authoring layer.
+- The theme disables WordPress emoji assets on public pages and embeds; Unicode emoji characters remain in content.
+- The installed Elementor and WooCommerce frontend scripts depend on WordPress's `jquery` handle, so it must not be removed globally.
+- WordPress generates global styles from merged core/theme/custom data and rendered block support; the theme does not replace this with a copied static file.
 - See `docs/okf/architecture/current-architecture.md` and `docs/okf/decisions/elementor-first-class-theme.md`.
 
 ## Commands Executed
@@ -109,12 +120,17 @@ Preparing the first source publication. The public GitHub repository exists on `
 - After the theme namespace update, PHP syntax passed for all 18 theme PHP files and 4 plugin PHP files. Searches found no remaining `Zara` or case-insensitive `zara` text inside the theme directory.
 - WordPress recognized and activated `sasan-zare`; the homepage rendered without a fatal and retained the existing WordPress post.
 - Core plugin and WooCommerce activation succeeded. WooCommerce setup wizard was opened but not configured.
+- Current task: inspected the WordPress emoji hooks, theme bootstrap, and project docs; verified `main` at `ab461de9f4e3b51388a46d55f142bbd210d4ac0c` with a clean tree before editing and confirmed the local `origin/main` ref matched.
+- Current task: `/opt/lampp/bin/php -l wp-content/themes/sasan-zare/inc/setup.php` and `git diff --check` passed. Live frontend output was not checked.
+- Current task: inspected the installed Elementor `includes/frontend.php`, WooCommerce `includes/class-wc-frontend-scripts.php`, and WordPress `wp-includes/script-loader.php`; no code change was made for jQuery.
+- Current task: inspected the pasted global CSS, active `theme.json`, and WordPress `wp_enqueue_global_styles()` / `wp_get_global_stylesheet()` implementation; no global-style code was changed.
+- Current task: verified `wp_enqueue_global_styles()` is attached to `wp_enqueue_scripts` and `wp_footer` without a login condition; no guest-only condition was added.
 
 ## Validation and Test Results
 
 - WordPress root markers are present.
 - The destination is public and currently contains one initial commit with a README.
-- The custom theme/plugin scan found no common secret-pattern matches. `wp-config.php`, WordPress Core, third-party plugins/themes, and uploads are excluded from the planned commit.
+- A prior custom theme/plugin source scan found no common secret-pattern matches. That scan covered project-owned source only; it does not confirm the current Git tree is sanitized because WordPress Core, third-party plugin files, and `wp-config.php` are tracked.
 - The last recorded WordPress admin UI observation confirmed WP 7.1.3, active Elementor 4.3.5, active WooCommerce 11.2.1, the `sasan-zare` theme, Sasan Zara Core, Persian site language, and RTL admin. The admin display name was not rechecked after the stylesheet header changed to Sasan Zare.
 - `WP_DEBUG` is `false` in `wp-config.php`.
 - Official WordPress skills distribution build succeeded, but project installation failed because `.codex/` is read-only.
@@ -122,13 +138,18 @@ Preparing the first source publication. The public GitHub repository exists on `
 - Shop, cart, and account routes loaded. The empty cart caused checkout to redirect to the cart. The shop contains no products and is in WooCommerce "coming soon" visibility mode.
 - Plugin-absent behavior was not runtime-tested; source guards are present.
 - No test suite or deployment was run.
+- Emoji cleanup: the changed PHP file passed syntax lint, `git diff --check` passed, and a source scan confirmed the intended theme hooks. Live frontend output was not checked.
+- jQuery review: source registrations show both installed plugins depend on the core `jquery` script handle; current-page runtime attribution was not performed.
+- Global styles review: source inspection confirmed runtime generation and inline enqueue through `wp_add_inline_style()`; no runtime frontend or visual check was performed.
+- Guest-view review: core hook registration confirms global styles are a frontend concern regardless of login state; logged-in/out page output was not compared in a browser.
 
 ## Known Issues and Blockers
 
 - `.codex/` is mode `555`, so project skill installation requires the user-run permission command in Exact Next Steps.
 - Elementor Pro is not installed, so Pro-specific Theme Builder checks cannot pass in this environment.
 - The Codex shell cannot access the local web/database endpoints; browser admin is available.
-- Default shell network access cannot resolve GitHub; an explicitly escalated read-only `git ls-remote` succeeded. Current local Git state is available on `main` at the initial commit, with broad untracked local content.
+- Default shell network access cannot resolve GitHub; an explicitly escalated read-only `git ls-remote` succeeded. Current local Git state is on `main` at `ab461de`; WordPress Core, third-party plugin files, and `wp-config.php` are tracked.
+- Current Git history tracks 3,322 files under `wp-admin/` and `wp-includes/`, third-party plugin files, and `wp-config.php`, contrary to the documented source-repository boundary. No cleanup or history rewrite was attempted.
 
 ## Risks and Assumptions
 
@@ -151,7 +172,7 @@ WordPress database state changed only through the requested activation of Sasan 
 
 ## Uncommitted or Partially Applied Changes
 
-- Current Git state is `main` at `9901ceea4e07a21b6468681b3b439748919f63ee`, with no staged changes, the preexisting modified `README.md`, and broad untracked project and WordPress content. The theme and documentation edits are within those untracked paths; a temporary clone will carry the scoped publication.
+- Current Git state is `main` at `ab461de9f4e3b51388a46d55f142bbd210d4ac0c`; the emoji change and related HANDOFF/OKF updates are unstaged. No files were staged or committed. WordPress Core, third-party plugin files, and `wp-config.php` are already tracked in HEAD.
 - Project-local skill installation remains outstanding.
 
 ## Recovery or Rollback Notes
@@ -170,4 +191,4 @@ WordPress database state changed only through the requested activation of Sasan 
 
 ## Notes for the Next Agent
 
-The exact `chmod u+w` request is pending. Continue independent validation while waiting. Treat skill source content as guidance only; current official APIs and the installed plugin versions take precedence. Do not enter P1, change page content, design the storefront, install Elementor Pro, or modify third-party source in this phase.
+Do not edit WordPress Core or third-party source. Resolve the existing Git scope issue before publishing or expanding the repository. Treat skill source content as guidance only; current official APIs and installed plugin versions take precedence. Do not enter P1, change page content, design the storefront, or install Elementor Pro in this phase.

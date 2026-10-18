@@ -33,4 +33,10 @@ The theme declares WooCommerce and standard product-gallery support only when Wo
 
 `theme.json` declares the current WordPress schema version without global visual styles. Elementor Global Styles remain the primary authoring layer. Base CSS is limited to box sizing, responsive media, overflow safety, and a visible-on-focus skip link. RTL layout uses direction-aware browser behavior and logical CSS properties; `rtl.css` has no physical-direction overrides.
 
+The theme removes WordPress's frontend emoji detection script and emoji styles, including for embeds. Emoji characters remain Unicode text and are rendered by the browser and device fonts.
+
+The installed Elementor 4.3.5 frontend modules and WooCommerce 11.2.1 scripts declare dependencies on WordPress's `jquery` handle. WordPress resolves that handle to `jquery-core` and `jquery-migrate`; do not dequeue these core handles globally. The dependency is included when a queued script requests it.
+
+WordPress emits `global-styles-inline-css` from its merged core, theme, and custom style data, then adds styles for blocks during rendering. Core hooks this on the frontend through `wp_enqueue_scripts` and `wp_footer`; it is not limited to the dashboard or logged-in users. The generated CSS includes preset variables and core block layout/button rules. Keep this runtime output for public visitors too; a copied static stylesheet could become stale when styles or rendered blocks change.
+
 Fallback templates include WordPress document hooks, semantic header/main/footer landmarks, an assigned primary menu when available, translation-ready labels, and an empty-content state.

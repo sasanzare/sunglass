@@ -47,3 +47,17 @@ function saz_setup_theme(): void {
 	);
 }
 add_action( 'after_setup_theme', __NAMESPACE__ . '\\saz_setup_theme' );
+
+/**
+ * Use native Unicode emoji rendering on public pages instead of WordPress emoji assets.
+ *
+ * @return void
+ */
+function saz_disable_frontend_emoji_assets(): void {
+	remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
+	remove_action( 'wp_enqueue_scripts', 'wp_enqueue_emoji_styles' );
+	remove_action( 'wp_print_styles', 'print_emoji_styles' );
+	remove_action( 'embed_head', 'print_emoji_detection_script' );
+	remove_action( 'enqueue_embed_scripts', 'wp_enqueue_emoji_styles' );
+}
+add_action( 'init', __NAMESPACE__ . '\\saz_disable_frontend_emoji_assets', 20 );
