@@ -12,7 +12,7 @@ status: active
 
 # Decision
 
-Build Sasan Zare as an original classic PHP theme that delegates page and template presentation to Elementor wherever available, with small accessible WordPress fallbacks. Keep reusable functionality and business logic in the separate Sasan Zara Core plugin.
+Build Sasan Zare as an original classic PHP theme that delegates page and template presentation to Elementor wherever available, with small accessible WordPress fallbacks. Keep reusable functionality and business logic in the separate Sasan Zare Core plugin.
 
 # Rationale
 
@@ -23,5 +23,5 @@ The project requires Elementor-editable layouts, minimal theme-side visual lock-
 - Register Elementor core Theme Builder locations through the supported theme-location API and guard rendering when Elementor Pro is absent.
 - Keep theme CSS and `theme.json` neutral so Elementor Global Styles remain authoritative.
 - Keep WooCommerce integration to native theme support and APIs; do not duplicate WooCommerce templates during bootstrap.
-- Keep widgets, dynamic tags, data/query features, and business rules in the companion plugin.
+- Keep widgets, dynamic tags, data/query features, and business rules in the companion plugin. The first production widget is `saz-eyewear-hero`, with its shared renderer also used by the theme's empty-homepage fallback.
 - Validate editor and Theme Builder behavior against the installed versions before claiming compatibility.

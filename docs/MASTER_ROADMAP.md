@@ -1,6 +1,6 @@
-# Sasan Zara Master Roadmap
+# Sasan Zare Master Roadmap
 
-The current scope is Phase 0 only. Do not begin P1 or later until Phase 0 acceptance criteria and validation are complete.
+Phase 0 established the project foundation and remains partial where its report lists unresolved environment checks. The first production UI slice is independently authorized: the homepage Header + Hero, spanning the relevant parts of P2 (design tokens), P4 (header/navigation), P5 (hero), P11 (one reusable Elementor widget), and P12 (RTL/responsive/accessibility checks). This authorization does not extend to redesigning other storefront pages.
 
 1. P0 — Bootstrap / Skills / Theme Foundation (in progress)
 2. P1 — Architecture Audit & Requirements

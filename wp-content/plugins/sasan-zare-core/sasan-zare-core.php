@@ -20,5 +20,7 @@ if ( ! defined( 'SAZ_CORE_VERSION' ) ) {
 }
 
 require_once __DIR__ . '/includes/class-plugin.php';
+require_once __DIR__ . '/includes/class-homepage-hero.php';
 
 Plugin::boot();
+Homepage_Hero::boot();

@@ -24,12 +24,32 @@ function saz_enqueue_assets(): void {
 		array( 'sasan-zare' ),
 		$version
 	);
+	wp_enqueue_style(
+		'sasan-zare-design-system',
+		get_theme_file_uri( 'assets/css/design-system.css' ),
+		array( 'sasan-zare-base' ),
+		(string) filemtime( get_theme_file_path( 'assets/css/design-system.css' ) )
+	);
+	wp_enqueue_style(
+		'sasan-zare-header',
+		get_theme_file_uri( 'assets/css/header.css' ),
+		array( 'sasan-zare-design-system' ),
+		(string) filemtime( get_theme_file_path( 'assets/css/header.css' ) )
+	);
+
+	wp_enqueue_script(
+		'sasan-zare-header',
+		get_theme_file_uri( 'assets/js/site-header.js' ),
+		array(),
+		$version,
+		true
+	);
 
 	if ( is_rtl() ) {
 		wp_enqueue_style(
 			'sasan-zare-rtl',
 			get_theme_file_uri( 'rtl.css' ),
-			array( 'sasan-zare-base' ),
+			array( 'sasan-zare-header' ),
 			$version
 		);
 	}

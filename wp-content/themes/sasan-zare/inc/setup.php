@@ -42,7 +42,7 @@ function saz_setup_theme(): void {
 
 	register_nav_menus(
 		array(
-			'primary' => esc_html__( 'Primary menu', 'sasan-zare' ),
+			'primary' => esc_html__( 'Primary Navigation', 'sasan-zare' ),
 		)
 	);
 }

@@ -14,6 +14,7 @@ Copy `wp-content/themes/sasan-zare/` and `wp-content/plugins/sasan-zare-core/` i
 
 ## Project guidance
 
+- [Standalone design contract and reusable implementation prompt](DESIGN.md)
 - [Agent instructions](AGENTS.md)
 - [Project handoff](HANDOFF.md)
 - [Phase 0 report](docs/PHASE_0_BOOTSTRAP_REPORT.md)

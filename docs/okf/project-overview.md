@@ -1,7 +1,7 @@
 ---
 type: Project Overview
-title: Sasan Zara Project Overview
-description: Scope and local environment for the Sasan Zare theme and Sasan Zara Core plugin.
+title: Sasan Zare Project Overview
+description: Scope and local environment for the Sasan Zare theme and Sasan Zare Core plugin.
 tags:
   - wordpress
   - elementor
@@ -12,26 +12,30 @@ status: active
 
 # Purpose
 
-Sasan Zare is an original, Elementor-first classic WordPress theme foundation for a Persian RTL WooCommerce site. Sasan Zara Core is reserved for reusable integrations and business functionality that should survive a theme switch.
+Sasan Zare is an original, Elementor-first classic WordPress theme for a Persian RTL WooCommerce site. Sasan Zare Core owns reusable Elementor integrations and business functionality that should survive a theme switch.
 
 The project-owned source is published in the [sasanzare/sunglass repository](https://github.com/sasanzare/sunglass). That repository contains the custom theme, companion plugin, and project documentation; it is not a copy of the local WordPress runtime.
 
 # Scope
 
-The current milestone is Phase 0 infrastructure. It establishes theme/plugin bootstraps, minimal fallbacks, Elementor Theme Builder integration points, WooCommerce theme support, project rules, and documentation. Final store design, custom Elementor widgets, custom WooCommerce templates, and business features are not part of Phase 0.
+Phase 0 established the theme/plugin bootstraps, minimal fallbacks, Elementor Theme Builder integration points, WooCommerce theme support, project rules, and documentation. The first production UI slice is now the homepage Header + Hero: a responsive WordPress-menu header and an Elementor-editable eyewear hero, with the scoped Liquid Glass tokens and WooCommerce product/cart integrations needed for that first viewport. The latest reference pass matches the supplied Premium Persian Eyewear Showcase composition using a clean full-bleed photo and independent HTML controls. A default editorial card avoids fabricated commerce data. Other storefront pages and custom WooCommerce templates remain out of scope.
+
+The visual contract is documented in [Liquid Glass Design Language v2](../LIQUID_GLASS_DESIGN_LANGUAGE_V2.md) and the [Eyewear Store Color Palette](../EYEWEAR_LIQUID_GLASS_COLOR_PALETTE.md). These design files complement this OKF bundle and remain the UI source of truth.
 
 # Observed Environment
 
 - WordPress root: `/opt/lampp/htdocs/dashboard/sunglass`.
 - WordPress 7.1.3; PHP CLI 8.2.4 at `/opt/lampp/bin/php`.
 - Elementor 4.3.5 is active. Elementor Pro is not installed or listed in the local plugin inventory.
-- WooCommerce 11.2.1 and Sasan Zara Core are active.
+- WooCommerce 11.2.1 and Sasan Zare Core were observed active.
 - The active theme is Sasan Zare with slug `sasan-zare`; Twenty Twenty-Five was active before Phase 0.
 - Site language is Persian (`fa_IR`) and the admin is RTL.
-- WooCommerce is in "coming soon" visibility mode; the shop currently contains no products.
-- The existing Elementor sample page is marked as Elementor content in wp-admin, but its Persian public permalink currently returns the theme's 404 fallback, leaving the editor preview canvas blank.
+- WooCommerce remains in "coming soon" visibility mode. The local catalog now contains ten published simple products across two categories; their generated models and proposed details/prices have not been verified against supplier inventory.
+- WooCommerce currency code is `IRR`; the theme displays `تومان`, and catalog values are entered in tomans with zero decimal places. See the [Iranian Toman Price Display decision](decisions/iranian-toman-display.md).
+- In the observed local setup, WordPress rejected WebP uploads because it could not process them. PHP GD lacks WebP read/write functions and Imagick is absent in the CLI check; compressed JPEG product images were accepted and resized by WordPress.
+- An earlier Elementor sample-page preview failed on its pretty permalink. It has not been retested in the reference pass. The user confirmed other pages remain unbuilt; server/permalink changes are outside the homepage scope.
 - The Codex shell reports Linux. Shell access to the local HTTP/database ports is restricted; the WordPress site remains reachable from the logged-in browser.
-- The local WordPress root has an empty, read-only `.git/` directory in this XAMPP environment; the project source repository is hosted separately on GitHub.
+- The project source checkout is a Git repository at the local WordPress root. It contains project-owned source and documentation; local WordPress runtime files and site data are outside the intended repository scope.
 
 # Boundaries
 
