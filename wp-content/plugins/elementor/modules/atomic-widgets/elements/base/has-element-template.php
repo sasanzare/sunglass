@@ -95,14 +95,11 @@ trait Has_Element_Template {
 	}
 
 	protected function build_base_template_context(): array {
-		$settings = $this->get_atomic_settings();
-
 		return [
 			'id' => $this->get_id(),
 			'interaction_id' => $this->get_interaction_id(),
 			'type' => $this->get_name(),
-			'settings' => $settings,
-			'tag' => static::get_computed_html_tag( $settings ),
+			'settings' => $this->get_atomic_settings(),
 			'base_styles' => $this->get_base_styles_dictionary(),
 			'children_placeholder' => $this->get_children_placeholder(),
 		];

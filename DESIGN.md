@@ -169,7 +169,7 @@ Do not place the photo in a separate rounded rectangle next to a second opaque r
 
 ### Content / commerce behavior
 
-Use actual WordPress menus, custom logos, configured copy, and WooCommerce product/cart data when present. Preserve already configured identity and content.
+Use actual WordPress menus, custom logos, configured copy, and WooCommerce product/cart data when present. Preserve already configured identity and content. The fallback header reads WordPress site identity and the assigned primary menu. For Elementor editing, an Elementor Pro Theme Builder header takes priority; without Pro, the selected saved Elementor template can use the `Sasan Zare Header` widget to edit the logo, brand copy, navigation, search placeholder, and available actions. Edit homepage hero text and media through the `Eyewear Hero` widget.
 
 Without a selected real product, the current card uses `عینک طبی مون‌بلانک`, `Montblanc MB0340`, a catalog link `کشف فریم دلخواه شما`, and the visible label `پیشنهاد استایل`. This is editorial inspiration, not inventory. Do not copy the screenshot's example price or cart count into production data. A real product supplies its own image, price, attributes, and permalink.
 

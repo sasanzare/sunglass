@@ -3,10 +3,8 @@ namespace Elementor\Modules\MarkdownRender;
 
 use Elementor\Core\Base\Module as BaseModule;
 use Elementor\Core\Experiments\Manager as Experiments_Manager;
-use Elementor\Core\Frontend\Widget_Content_Render_Mode;
 use Elementor\Plugin;
 use Elementor\Settings;
-use Elementor\Utils;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -16,22 +14,6 @@ class Module extends BaseModule {
 
 	const EXPERIMENT_NAME = 'markdown_rendering';
 	const CACHE_META_KEY = '_elementor_markdown_cache';
-
-	public static function is_rendering_markdown(): bool {
-		return Widget_Content_Render_Mode::is( Widget_Content_Render_Mode::MARKDOWN );
-	}
-
-	public static function set_rendering_markdown( bool $is_rendering ): void {
-		Widget_Content_Render_Mode::set_current(
-			$is_rendering ? Widget_Content_Render_Mode::MARKDOWN : Widget_Content_Render_Mode::NORMAL
-		);
-	}
-
-	public static function execute_while_rendering_markdown( callable $callback ) {
-		// Markdown rendering must not enqueue editor CSS or parse post stylesheets.
-		// The render mode lets CSS and document cache layers skip those side effects while widgets render.
-		return Widget_Content_Render_Mode::execute_as( Widget_Content_Render_Mode::MARKDOWN, $callback );
-	}
 
 	public function get_name() {
 		return 'markdown-render';
@@ -105,25 +87,23 @@ class Module extends BaseModule {
 			return;
 		}
 
-		self::execute_while_rendering_markdown( function () use ( $is_preview, $document, $post_id ) {
-			if ( $is_preview ) {
+		if ( $is_preview ) {
+			$markdown = ( new Markdown_Renderer() )->render( $document );
+		} else {
+			$markdown = $this->get_cached_markdown( $post_id );
+
+			if ( false === $markdown ) {
 				$markdown = ( new Markdown_Renderer() )->render( $document );
-			} else {
-				$markdown = $this->get_cached_markdown( $post_id );
-
-				if ( false === $markdown ) {
-					$markdown = ( new Markdown_Renderer() )->render( $document );
-					$this->set_cached_markdown( $post_id, $markdown );
-				}
+				$this->set_cached_markdown( $post_id, $markdown );
 			}
+		}
 
-			Utils::do_not_cache();
-			status_header( 200 );
-			header( 'Content-Type: text/markdown; charset=utf-8' );
-			header( 'X-Content-Type-Options: nosniff' );
-			Utils::print_unescaped_internal_string( $markdown );
-			exit;
-		} );
+		nocache_headers();
+		status_header( 200 );
+		header( 'Content-Type: text/markdown; charset=utf-8' );
+		header( 'X-Content-Type-Options: nosniff' );
+		echo $markdown; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		exit;
 	}
 
 	private function is_valid_preview_request( int $post_id ): bool {

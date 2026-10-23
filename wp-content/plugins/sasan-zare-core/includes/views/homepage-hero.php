@@ -17,6 +17,8 @@
  * @var string               $product_image Product image HTML.
  * @var string               $product_price WooCommerce formatted product price.
  * @var array<int,array>     $benefits Benefit repeater items.
+ * @var string              $editorial_image_html Escaped style-inspiration image markup.
+ * @var string              $editorial_url Style-inspiration card destination.
  */
 
 namespace SasanZare\Core;
@@ -88,7 +90,7 @@ $heading         = trim( (string) $settings['heading'] );
 		</div>
 
 		<div class="saz-home-hero__visual" style="--saz-hero-image-position: <?php echo esc_attr( (string) $image_position_y ); ?>%;">
-			<p class="saz-home-hero__manifesto" lang="en" dir="ltr" aria-hidden="true">CLEARER<br>WORLD<br>A BRIGHTER<br>YOU<span></span></p>
+			<?php if ( '' !== trim( (string) $settings['scene_caption'] ) ) : ?><p class="saz-home-hero__manifesto" lang="en" dir="ltr" aria-hidden="true"><?php echo nl2br( esc_html( $settings['scene_caption'] ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped text with generated line breaks. ?><span></span></p><?php endif; ?>
 
 			<article class="saz-product-card" aria-label="<?php esc_attr_e( 'محصول منتخب عینک', 'sasan-Zare-core' ); ?>">
 				<div class="saz-product-card__top">
@@ -100,7 +102,7 @@ $heading         = trim( (string) $settings['heading'] );
 						<div class="saz-product-card__placeholder" aria-hidden="true"><?php echo Homepage_Hero::get_icon_markup( 'glasses' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Static SVG. ?></div>
 					<?php else : ?>
 						<div class="saz-product-card__editorial-image">
-							<img class="saz-product-card__image" src="<?php echo esc_url( $editorial_product_url ); ?>" alt="<?php esc_attr_e( 'فریم طبی مشکی؛ تصویر الهام‌بخش استایل', 'sasan-Zare-core' ); ?>" width="1024" height="640" decoding="async">
+							<?php echo $editorial_image_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped renderer/WordPress attachment markup. ?>
 						</div>
 					<?php endif; ?>
 					<button class="saz-product-card__wishlist" type="button" disabled aria-label="<?php esc_attr_e( 'فهرست علاقه‌مندی‌ها در حال حاضر در دسترس نیست', 'sasan-Zare-core' ); ?>" title="<?php esc_attr_e( 'فهرست علاقه‌مندی‌ها در حال حاضر در دسترس نیست', 'sasan-Zare-core' ); ?>">
@@ -114,9 +116,9 @@ $heading         = trim( (string) $settings['heading'] );
 					<?php if ( '' !== (string) $product->get_sku() ) : ?><p class="saz-product-card__sku"><bdi dir="auto"><?php echo esc_html( $product->get_sku() ); ?></bdi></p><?php endif; ?>
 					<?php if ( '' !== $product_price ) : ?><div class="saz-product-card__price"><?php echo wp_kses_post( $product_price ); ?></div><?php endif; ?>
 				<?php else : ?>
-					<h2 class="saz-product-card__title"><?php esc_html_e( 'عینک طبی مون‌بلانک', 'sasan-Zare-core' ); ?></h2>
-					<p class="saz-product-card__sku" lang="en" dir="ltr">Montblanc MB0340</p>
-					<a class="saz-product-card__collection" href="<?php echo esc_url( $primary_url ); ?>"><?php esc_html_e( 'کشف فریم دلخواه شما', 'sasan-Zare-core' ); ?></a>
+					<?php if ( '' !== trim( (string) $settings['editorial_title'] ) ) : ?><h2 class="saz-product-card__title"><?php echo esc_html( $settings['editorial_title'] ); ?></h2><?php endif; ?>
+					<?php if ( '' !== trim( (string) $settings['editorial_sku'] ) ) : ?><p class="saz-product-card__sku" dir="auto"><?php echo esc_html( $settings['editorial_sku'] ); ?></p><?php endif; ?>
+					<?php if ( '' !== trim( (string) $settings['editorial_link_label'] ) ) : ?><a class="saz-product-card__collection" href="<?php echo esc_url( $editorial_url ); ?>"<?php if ( ! empty( $settings['editorial_target'] ) ) : ?> target="<?php echo esc_attr( $settings['editorial_target'] ); ?>" rel="<?php echo esc_attr( $settings['editorial_rel'] ); ?>"<?php endif; ?>><?php echo esc_html( $settings['editorial_link_label'] ); ?></a><?php endif; ?>
 					<p class="saz-product-card__editorial-note"><?php esc_html_e( 'پیشنهاد استایل', 'sasan-Zare-core' ); ?></p>
 				<?php endif; ?>
 				<?php if ( ! $product ) : ?><div class="saz-product-card__swatches" aria-hidden="true"><span></span><span></span><span></span></div><?php endif; ?>
@@ -126,12 +128,13 @@ $heading         = trim( (string) $settings['heading'] );
 	<?php if ( $show_guide ) : ?>
 		<dialog id="<?php echo esc_attr( $guide_id ); ?>" class="saz-frame-guide" aria-labelledby="<?php echo esc_attr( $guide_id . '-title' ); ?>">
 			<button type="button" class="saz-frame-guide__close" data-saz-guide-close aria-label="<?php esc_attr_e( 'بستن راهنمای انتخاب فریم', 'sasan-Zare-core' ); ?>">×</button>
-			<p class="saz-frame-guide__eyebrow"><?php esc_html_e( 'فریمی برای چهرهٔ شما', 'sasan-Zare-core' ); ?></p>
+			<?php if ( '' !== trim( (string) $settings['guide_eyebrow'] ) ) : ?><p class="saz-frame-guide__eyebrow"><?php echo esc_html( $settings['guide_eyebrow'] ); ?></p><?php endif; ?>
 			<h2 id="<?php echo esc_attr( $guide_id . '-title' ); ?>"><?php echo esc_html( $secondary_label ); ?></h2>
 			<ul>
-				<li><strong><?php esc_html_e( 'صورت گرد', 'sasan-Zare-core' ); ?></strong><p><?php esc_html_e( 'فریم‌های مستطیلی و زاویه‌دار به چهره تعادل و کشیدگی می‌دهند.', 'sasan-Zare-core' ); ?></p></li>
-				<li><strong><?php esc_html_e( 'صورت زاویه‌دار', 'sasan-Zare-core' ); ?></strong><p><?php esc_html_e( 'فریم‌های گرد و بیضی، خطوط چهره را نرم‌تر نشان می‌دهند.', 'sasan-Zare-core' ); ?></p></li>
-				<li><strong><?php esc_html_e( 'اندازه و راحتی', 'sasan-Zare-core' ); ?></strong><p><?php esc_html_e( 'عرض فریم را با عرض صورت هماهنگ کنید؛ پل عینک و دسته‌ها باید بدون فشار روی صورت قرار بگیرند.', 'sasan-Zare-core' ); ?></p></li>
+				<?php foreach ( $settings['guide_items'] as $item ) : ?>
+					<?php if ( ! is_array( $item ) ) { continue; } ?>
+					<li><strong><?php echo esc_html( $item['title'] ?? '' ); ?></strong><p><?php echo esc_html( $item['description'] ?? '' ); ?></p></li>
+				<?php endforeach; ?>
 			</ul>
 			<a class="saz-hero-button saz-hero-button--primary" href="<?php echo esc_url( $primary_url ); ?>"><?php echo esc_html( $primary_label ); ?></a>
 		</dialog>

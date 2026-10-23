@@ -8,11 +8,10 @@ use Elementor\Modules\AtomicWidgets\Elements\Base\Atomic_Widget_Base;
 use Elementor\Modules\AtomicWidgets\Controls\Section;
 use Elementor\Modules\AtomicWidgets\Controls\Types\Link_Control;
 use Elementor\Modules\AtomicWidgets\Elements\Base\Has_Template;
-use Elementor\Modules\AtomicWidgets\Elements\Base\Html_Tag_Computer;
 use Elementor\Modules\AtomicWidgets\PropTypes\Background_Prop_Type;
 use Elementor\Modules\AtomicWidgets\PropTypes\Attributes_Prop_Type;
 use Elementor\Modules\AtomicWidgets\PropTypes\Classes_Prop_Type;
-use Elementor\Modules\AtomicWidgets\PropTypes\Escaped_Html_Prop_Type;
+use Elementor\Modules\AtomicWidgets\PropTypes\Html_V3_Prop_Type;
 use Elementor\Modules\AtomicWidgets\PropTypes\Color_Prop_Type;
 use Elementor\Modules\AtomicWidgets\PropTypes\Link_Prop_Type;
 use Elementor\Modules\AtomicWidgets\PropTypes\Dimensions_Prop_Type;
@@ -38,15 +37,11 @@ class Atomic_Button extends Atomic_Widget_Base {
 	}
 
 	public function get_keywords() {
-		return [ 'ato', 'atom', 'atoms', 'atomic', 'button', 'cta', 'link', 'click' ];
+		return [ 'ato', 'atom', 'atoms', 'atomic' ];
 	}
 
 	public function get_icon() {
 		return 'eicon-e-button';
-	}
-
-	public static function get_computed_html_tag( array $settings ): string {
-		return Html_Tag_Computer::compute( $settings, 'button' );
 	}
 
 	protected static function define_props_schema(): array {
@@ -54,8 +49,11 @@ class Atomic_Button extends Atomic_Widget_Base {
 			'classes' => Classes_Prop_Type::make()
 				->default( [] ),
 
-			'text' => Escaped_Html_Prop_Type::make()
-				->default( __( 'Click here', 'elementor' ) )
+			'text' => Html_V3_Prop_Type::make()
+				->default( [
+					'content'  => String_Prop_Type::generate( __( 'Click here', 'elementor' ) ),
+					'children' => [],
+				] )
 				->description( 'The text displayed on the button.' )
 				->alias( 'content', 'label' ),
 

@@ -14,8 +14,6 @@ class Manager extends DB_Upgrades_Manager {
 	 */
 	const INSTALLS_HISTORY_META = 'elementor_install_history';
 
-	const VERSION_OPTION_NAME = 'elementor_version';
-
 	public static function get_install_history_meta() {
 		return 'elementor_install_history';
 	}
@@ -58,7 +56,7 @@ class Manager extends DB_Upgrades_Manager {
 	}
 
 	public function get_version_option_name() {
-		return self::VERSION_OPTION_NAME;
+		return 'elementor_version';
 	}
 
 	public function get_upgrades_class() {

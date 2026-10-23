@@ -43,11 +43,4 @@ class Classes_Prop_Type extends Plain_Prop_Type {
 			return ! empty( $class_name );
 		});
 	}
-
-	public function to_json_schema(): array {
-		return $this->wrap_json_schema( [
-			'type' => 'array',
-			'items' => [ 'type' => 'string' ],
-		] );
-	}
 }

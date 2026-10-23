@@ -20,7 +20,7 @@ defined( 'ABSPATH' ) || exit;
 <a class="saz-skip-link screen-reader-text" href="#primary"><?php esc_html_e( 'Skip to content', 'sasan-zare' ); ?></a>
 <div id="page" class="saz-site">
 	<?php
-	if ( ! saz_render_elementor_location( 'header' ) ) {
-		get_template_part( 'template-parts/fallback/header' );
+	if ( ! saz_render_elementor_location( 'header' ) && ! saz_render_elementor_header_template() ) {
+		saz_render_site_header();
 	}
 	?>

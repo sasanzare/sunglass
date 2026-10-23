@@ -251,7 +251,60 @@ final class Eyewear_Hero_Widget extends Widget_Base {
 				'title_field' => '{{{ title }}}',
 			)
 		);
+		$this->add_control(
+			'scene_caption',
+			array(
+				'label'       => esc_html__( 'Scene caption', 'sasan-Zare-core' ),
+				'type'        => Controls_Manager::TEXTAREA,
+				'default'     => $defaults['scene_caption'],
+				'description' => esc_html__( 'Use a new line for each line of the decorative caption.', 'sasan-Zare-core' ),
+			)
+		);
 
+		$this->end_controls_section();
+		$this->start_controls_section(
+			'editorial_section',
+			array(
+				'label'     => esc_html__( 'Style inspiration card', 'sasan-Zare-core' ),
+				'tab'       => Controls_Manager::TAB_CONTENT,
+				'condition' => array( 'featured_product_id' => '' ),
+			)
+		);
+		$this->add_control(
+			'editorial_image',
+			array(
+				'label'   => esc_html__( 'Card image', 'sasan-Zare-core' ),
+				'type'    => Controls_Manager::MEDIA,
+				'default' => $defaults['editorial_image'],
+				'dynamic' => array( 'active' => true ),
+			)
+		);
+		$card_labels = array(
+			'editorial_image_alt'  => esc_html__( 'Card image alternative text', 'sasan-Zare-core' ),
+			'editorial_title'      => esc_html__( 'Card title', 'sasan-Zare-core' ),
+			'editorial_sku'        => esc_html__( 'Card model', 'sasan-Zare-core' ),
+			'editorial_link_label' => esc_html__( 'Card link label', 'sasan-Zare-core' ),
+		);
+		foreach ( $card_labels as $key => $label ) {
+			$this->add_control( $key, array( 'label' => $label, 'type' => Controls_Manager::TEXT, 'default' => $defaults[ $key ], 'label_block' => true ) );
+		}
+		$this->add_control(
+			'editorial_url',
+			array(
+				'label'       => esc_html__( 'Card link', 'sasan-Zare-core' ),
+				'type'        => Controls_Manager::URL,
+				'default'     => array( 'url' => '' ),
+				'description' => esc_html__( 'Leave empty to use the primary button destination. This card stays labeled as style inspiration; select a WooCommerce product to show real product data and prices.', 'sasan-Zare-core' ),
+			)
+		);
+		$this->end_controls_section();
+
+		$this->start_controls_section( 'guide_section', array( 'label' => esc_html__( 'Frame guide', 'sasan-Zare-core' ), 'tab' => Controls_Manager::TAB_CONTENT ) );
+		$this->add_control( 'guide_eyebrow', array( 'label' => esc_html__( 'Guide introduction', 'sasan-Zare-core' ), 'type' => Controls_Manager::TEXT, 'default' => $defaults['guide_eyebrow'], 'label_block' => true ) );
+		$guide_repeater = new Repeater();
+		$guide_repeater->add_control( 'title', array( 'label' => esc_html__( 'Title', 'sasan-Zare-core' ), 'type' => Controls_Manager::TEXT, 'label_block' => true ) );
+		$guide_repeater->add_control( 'description', array( 'label' => esc_html__( 'Description', 'sasan-Zare-core' ), 'type' => Controls_Manager::TEXTAREA ) );
+		$this->add_control( 'guide_items', array( 'label' => esc_html__( 'Guide items', 'sasan-Zare-core' ), 'type' => Controls_Manager::REPEATER, 'fields' => $guide_repeater->get_controls(), 'default' => $defaults['guide_items'], 'title_field' => '{{{ title }}}' ) );
 		$this->end_controls_section();
 
 		$this->start_controls_section(
@@ -283,20 +336,15 @@ final class Eyewear_Hero_Widget extends Widget_Base {
 	 */
 	protected function render() {
 		$settings = $this->get_settings_for_display();
-		if ( isset( $settings['primary_url'] ) && is_array( $settings['primary_url'] ) ) {
-			$settings['primary_target'] = ! empty( $settings['primary_url']['is_external'] ) ? '_blank' : '';
-			$settings['primary_rel']    = ! empty( $settings['primary_url']['nofollow'] ) ? 'nofollow' : '';
-			$settings['primary_url'] = isset( $settings['primary_url']['url'] ) ? $settings['primary_url']['url'] : '';
-			if ( '_blank' === $settings['primary_target'] ) {
-				$settings['primary_rel'] = trim( $settings['primary_rel'] . ' noopener noreferrer' );
-			}
-		}
-		if ( isset( $settings['secondary_url'] ) && is_array( $settings['secondary_url'] ) ) {
-			$settings['secondary_target'] = ! empty( $settings['secondary_url']['is_external'] ) ? '_blank' : '';
-			$settings['secondary_rel']    = ! empty( $settings['secondary_url']['nofollow'] ) ? 'nofollow' : '';
-			$settings['secondary_url'] = isset( $settings['secondary_url']['url'] ) ? $settings['secondary_url']['url'] : '';
-			if ( '_blank' === $settings['secondary_target'] ) {
-				$settings['secondary_rel'] = trim( $settings['secondary_rel'] . ' noopener noreferrer' );
+		foreach ( array( 'primary', 'secondary', 'editorial' ) as $prefix ) {
+			$key = $prefix . '_url';
+			if ( isset( $settings[ $key ] ) && is_array( $settings[ $key ] ) ) {
+				$settings[ $prefix . '_target' ] = ! empty( $settings[ $key ]['is_external'] ) ? '_blank' : '';
+				$settings[ $prefix . '_rel' ] = ! empty( $settings[ $key ]['nofollow'] ) ? 'nofollow' : '';
+				$settings[ $key ] = $settings[ $key ]['url'] ?? '';
+				if ( '_blank' === $settings[ $prefix . '_target' ] ) {
+					$settings[ $prefix . '_rel' ] = trim( $settings[ $prefix . '_rel' ] . ' noopener noreferrer' );
+				}
 			}
 		}
 		if ( isset( $settings['image_position_y'] ) && is_array( $settings['image_position_y'] ) ) {

@@ -21,6 +21,17 @@ This bundle records the project's scope, theme/plugin boundaries, Elementor and 
 ## Decisions
 
 - [Decision Index](decisions/index.md) — accepted foundation choices and their rationale.
+- [Local Elementor Editor Dependencies](decisions/local-elementor-editor-assets.md) — local Ace assets, loader settings, provenance, and current verification limits.
+
+## Roadmap
+
+- [Roadmap Index](roadmap/index.md) — navigation for the full-site delivery plan.
+- [Full-Site Master Plan](roadmap/master-plan.md) — phased Elementor Pro/WooCommerce implementation contract and acceptance gates.
+
+## Requirements and content
+
+- [Requirements index](requirements/index.md) — Phase 1 route, page-ownership and content-contract navigation.
+- [P1 route and content contract](requirements/p1-content-contract.md) — runtime-backed sitemap, taxonomy, navigation and launch checklist.
 
 ## Maintenance
 

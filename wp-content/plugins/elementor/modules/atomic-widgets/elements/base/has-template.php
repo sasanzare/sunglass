@@ -50,14 +50,11 @@ trait Has_Template {
 				$renderer->register( $name, $path );
 			}
 
-			$settings = $this->get_atomic_settings();
-
 			$context = [
 				'id' => $this->get_id(),
 				'interaction_id' => $this->get_interaction_id(),
 				'type' => $this->get_name(),
-				'settings' => $settings,
-				'tag' => static::get_computed_html_tag( $settings ),
+				'settings' => $this->get_atomic_settings(),
 				'base_styles' => $this->get_base_styles_dictionary(),
 			];
 

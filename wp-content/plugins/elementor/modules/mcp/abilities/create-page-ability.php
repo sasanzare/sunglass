@@ -2,7 +2,6 @@
 
 namespace Elementor\Modules\Mcp\Abilities;
 
-use Elementor\Modules\Mcp\Abilities\Utils\Document_Mutation_Links;
 use Elementor\Plugin;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -13,10 +12,6 @@ class Create_Page_Ability extends Abstract_Ability {
 
 	protected function get_ability_id(): string {
 		return 'elementor/create-page';
-	}
-
-	public function is_exposed_via_proxy(): bool {
-		return false;
 	}
 
 	protected function get_definition(): Ability_Definition {
@@ -31,8 +26,6 @@ class Create_Page_Ability extends Abstract_Ability {
 					'edit_url' => [ 'type' => 'string' ],
 					'status' => [ 'type' => 'string' ],
 					'type' => [ 'type' => 'string' ],
-					'preview_url' => Document_Mutation_Links::preview_schema_property(),
-					'llm_instructions' => Document_Mutation_Links::llm_instructions_schema_property(),
 				],
 			],
 			[
@@ -139,9 +132,6 @@ class Create_Page_Ability extends Abstract_Ability {
 			'edit_url' => $document->get_edit_url(),
 			'status' => get_post_status( $post_id ),
 			'type' => $post_type,
-		] + Document_Mutation_Links::for_document(
-			$document,
-			__( 'Page created.', 'elementor' )
-		);
+		];
 	}
 }

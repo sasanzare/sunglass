@@ -1,7 +1,6 @@
 <?php
 namespace Elementor;
 
-use Elementor\Core\Frontend\Widget_Content_Render_Mode;
 use Elementor\Core\Utils\Promotions\Filtered_Promotions_Manager;
 use Elementor\Utils;
 
@@ -381,7 +380,7 @@ abstract class Widget_Base extends Element_Base {
 			'html_wrapper_class' => $this->get_html_wrapper_class(),
 			'show_in_panel' => $this->show_in_panel(),
 			'hide_on_search' => $this->hide_on_search(),
-			'upsale_data' => null,
+			'upsale_data' => Plugin::$instance->experiments->is_feature_active( 'e_panel_promotions' ) ? null : $this->get_upsale_data(),
 			'is_dynamic_content' => $this->is_dynamic_content(),
 			'has_widget_inner_wrapper' => $this->has_widget_inner_wrapper(),
 		];
@@ -625,7 +624,7 @@ abstract class Widget_Base extends Element_Base {
 		 *
 		 * @param Widget_Base $this The current widget.
 		 */
-		do_action( 'elementor/widget/before_render_content', $this, [ 'mode' => Widget_Content_Render_Mode::NORMAL ] );
+		do_action( 'elementor/widget/before_render_content', $this );
 
 		ob_start();
 
@@ -660,7 +659,7 @@ abstract class Widget_Base extends Element_Base {
 			 * @param string      $widget_content The content of the widget.
 			 * @param Widget_Base $this           The widget.
 			 */
-			$widget_content = apply_filters( 'elementor/widget/render_content', $widget_content, $this, [ 'mode' => Widget_Content_Render_Mode::NORMAL ] );
+			$widget_content = apply_filters( 'elementor/widget/render_content', $widget_content, $this );
 			Utils::print_unescaped_internal_string( $widget_content );
 			?>
 		<?php if ( $this->has_widget_inner_wrapper() ) : ?>
@@ -699,38 +698,11 @@ abstract class Widget_Base extends Element_Base {
 	}
 
 	public function render_markdown(): string {
-		$content = $this->get_render_content_for_markdown();
-
-		if ( '' === $content ) {
-			return '';
-		}
-
-		return \Elementor\Modules\MarkdownRender\Html_To_Markdown::convert( $content );
-	}
-
-	protected function get_render_content_for_markdown(): string {
-		$render_args = [ 'mode' => Widget_Content_Render_Mode::MARKDOWN ];
-
-		do_action( 'elementor/widget/before_render_content', $this, $render_args );
-
 		ob_start();
+		$this->render_content();
+		$html = ob_get_clean();
 
-		$skin = $this->get_current_skin();
-
-		if ( $skin ) {
-			$skin->set_parent( $this );
-			$skin->render_by_mode();
-		} else {
-			$this->render_by_mode();
-		}
-
-		$widget_content = ob_get_clean();
-
-		if ( '' === $widget_content ) {
-			return '';
-		}
-
-		return apply_filters( 'elementor/widget/render_content', $widget_content, $this, $render_args );
+		return wp_strip_all_tags( $html );
 	}
 
 	/**

@@ -153,3 +153,154 @@ function saz_reference_navigation( array $args = array() ): void {
 	}
 	echo '</ul>';
 }
+
+/**
+ * Return useful reference navigation links for Elementor header controls.
+ *
+ * @return array<int,array<string,mixed>>
+ */
+function saz_get_reference_navigation_items(): array {
+	$shop   = function_exists( '\\wc_get_page_permalink' ) ? \wc_get_page_permalink( 'shop' ) : home_url( '/' );
+	$search = static function ( string $term ): string {
+		return add_query_arg( array( 's' => $term, 'post_type' => 'product' ), home_url( '/' ) );
+	};
+	$items  = array(
+		array( __( 'خانه', 'sasan-zare' ), home_url( '/' ) ),
+		array( __( 'فروشگاه', 'sasan-zare' ), $shop ),
+		array( __( 'عینک طبی', 'sasan-zare' ), $search( 'طبی' ) ),
+		array( __( 'عینک آفتابی', 'sasan-zare' ), $search( 'آفتابی' ) ),
+		array( __( 'برندها', 'sasan-zare' ), add_query_arg( 'orderby', 'title', $shop ) ),
+		array( __( 'وبلاگ', 'sasan-zare' ), get_option( 'page_for_posts' ) ? get_permalink( (int) get_option( 'page_for_posts' ) ) : home_url( '/?post_type=post' ) ),
+	);
+	$controls = array();
+
+	foreach ( $items as $item ) {
+		$controls[] = array(
+			'label' => $item[0],
+			'url'   => array( 'url' => $item[1] ),
+		);
+	}
+
+	return $controls;
+}
+
+/**
+ * Return the current WordPress identity and header defaults.
+ *
+ * @return array<string,mixed>
+ */
+function saz_get_header_defaults(): array {
+	$site_name    = (string) get_bloginfo( 'name' );
+	$brand_name   = apply_filters( 'saz_reference_brand_name', 'فروشگاه عینک' === $site_name ? __( 'دیدآرا', 'sasan-zare' ) : $site_name );
+	$site_tagline = trim( (string) get_bloginfo( 'description' ) );
+	$custom_logo  = absint( get_theme_mod( 'custom_logo', 0 ) );
+	$logo_url     = $custom_logo ? wp_get_attachment_image_url( $custom_logo, 'full' ) : '';
+
+	return array(
+		'logo'               => array(
+			'id'  => $custom_logo,
+			'url' => is_string( $logo_url ) ? $logo_url : '',
+		),
+		'logo_alt'           => (string) $brand_name,
+		'brand_name'         => (string) $brand_name,
+		'tagline'            => '' !== $site_tagline ? $site_tagline : __( 'عینک فراتر از دید', 'sasan-zare' ),
+		'navigation_source'  => 'wordpress',
+		'wordpress_menu'     => 'primary',
+		'navigation_items'   => saz_get_reference_navigation_items(),
+		'show_search'        => 'yes',
+		'search_placeholder' => __( 'جستجوی محصولات، برندها و ...', 'sasan-zare' ),
+		'show_account'       => 'yes',
+		'show_wishlist'      => 'yes',
+		'show_cart'          => 'yes',
+	);
+}
+
+/**
+ * Return menus available to the Elementor header widget.
+ *
+ * @return array<string,string>
+ */
+function saz_get_header_menu_options(): array {
+	$options = array( 'primary' => __( 'Assigned primary menu or theme fallback', 'sasan-zare' ) );
+
+	foreach ( wp_get_nav_menus() as $menu ) {
+		$options[ 'menu:' . (int) $menu->term_id ] = wp_strip_all_tags( $menu->name );
+	}
+
+	return $options;
+}
+
+/**
+ * Render one navigation list from Elementor links or a WordPress menu.
+ *
+ * @param array<string,mixed> $settings Header widget settings.
+ * @param string             $menu_id Unique menu element ID.
+ * @return void
+ */
+function saz_render_header_navigation( array $settings, string $menu_id ): void {
+	if ( 'elementor' === ( $settings['navigation_source'] ?? '' ) ) {
+		$items = isset( $settings['navigation_items'] ) && is_array( $settings['navigation_items'] ) ? $settings['navigation_items'] : array();
+		if ( empty( $items ) ) {
+			saz_reference_navigation();
+			return;
+		}
+
+		echo '<ul class="saz-primary-menu">';
+		foreach ( $items as $item ) {
+			$label = isset( $item['label'] ) ? trim( (string) $item['label'] ) : '';
+			$url   = isset( $item['url'] ) && is_array( $item['url'] ) ? $item['url'] : array( 'url' => (string) ( $item['url'] ?? '' ) );
+			$href  = isset( $url['url'] ) ? trim( (string) $url['url'] ) : '';
+
+			if ( '' === $label || '' === $href ) {
+				continue;
+			}
+
+			$target  = ! empty( $url['is_external'] ) ? '_blank' : '';
+			$rel     = ! empty( $url['nofollow'] ) ? 'nofollow' : '';
+			$current = is_front_page() && untrailingslashit( $href ) === untrailingslashit( home_url( '/' ) );
+			if ( '_blank' === $target ) {
+				$rel = trim( $rel . ' noopener noreferrer' );
+			}
+
+			printf(
+				'<li%1$s><a href="%2$s"%3$s%4$s%5$s>%6$s</a></li>',
+				$current ? ' class="current-menu-item"' : '',
+				esc_url( $href ),
+				$current ? ' aria-current="page"' : '',
+				'' !== $target ? ' target="' . esc_attr( $target ) . '"' : '',
+				'' !== $rel ? ' rel="' . esc_attr( $rel ) . '"' : '',
+				esc_html( $label )
+			);
+		}
+		echo '</ul>';
+		return;
+	}
+
+	$menu = isset( $settings['wordpress_menu'] ) ? (string) $settings['wordpress_menu'] : 'primary';
+	$args = array(
+		'container'   => false,
+		'fallback_cb' => '\\SasanZare\\saz_reference_navigation',
+		'menu_id'     => $menu_id,
+		'menu_class'  => 'saz-primary-menu',
+		'depth'       => 2,
+	);
+
+	if ( 0 === strpos( $menu, 'menu:' ) ) {
+		$args['menu'] = absint( substr( $menu, 5 ) );
+	} else {
+		$args['theme_location'] = 'primary';
+	}
+
+	wp_nav_menu( $args );
+}
+
+/**
+ * Render shared header markup from WordPress defaults or Elementor settings.
+ *
+ * @param array<string,mixed> $settings Optional Elementor widget settings.
+ * @return void
+ */
+function saz_render_site_header( array $settings = array() ): void {
+	$settings = wp_parse_args( $settings, saz_get_header_defaults() );
+	get_template_part( 'template-parts/fallback/header', null, array( 'settings' => $settings ) );
+}

@@ -41,7 +41,7 @@ function saz_enqueue_assets(): void {
 		'sasan-zare-header',
 		get_theme_file_uri( 'assets/js/site-header.js' ),
 		array(),
-		$version,
+		(string) filemtime( get_theme_file_path( 'assets/js/site-header.js' ) ),
 		true
 	);
 

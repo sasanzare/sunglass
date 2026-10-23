@@ -144,17 +144,13 @@ class Styles_Renderer {
 		$schema = Style_Schema::get();
 
 		return Collection::make( Render_Props_Resolver::for_styles()->resolve( $schema, $props ) )
-			->filter( fn( $value ) => $this->is_renderable_value( $value ) )
+			->filter()
 			->map( function ( $value, $prop ) use ( $props, $schema ) {
 				$this->maybe_enqueue_font( $schema, $prop, $props[ $prop ] ?? null );
 
 				return $prop . ':' . $value . ';';
 			} )
 			->implode( '' );
-	}
-
-	private function is_renderable_value( $value ): bool {
-		return is_numeric( $value ) || ! empty( $value );
 	}
 
 	private function maybe_enqueue_font( array $schema, string $prop_key, $prop_value ): void {

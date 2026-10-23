@@ -1,5 +1,6 @@
 body.home .saz-site-header { position: absolute; inset: 0 0 auto; }
 body.home.admin-bar .saz-site-header { top: 32px; }
+body.home.admin-bar .elementor-widget-saz-site-header .saz-site-header { top: 0; }
 .saz-brand-mark { position: relative; display: block; flex: 0 0 auto; width: 4.1vw; min-width: 48px; height: 2.3vw; min-height: 29px; }
 .saz-brand-mark span { position: absolute; top: 0; width: 2.15vw; min-width: 29px; height: 2.15vw; min-height: 29px; border: 3px solid var(--color-primary); border-radius: 50%; }
 .saz-brand-mark span:first-child { right: 0; }

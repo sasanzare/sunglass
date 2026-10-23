@@ -12,12 +12,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Color_Stop_Transformer extends Transformer_Base {
 	public function transform( $value, Props_Resolver_Context $context ): string {
 		$color = $value['color'];
-		$offset = $value['offset'] ?? null;
+		$offset = $value['offset'] . '%';
 
-		if ( null === $offset || '' === $offset ) {
-			return (string) $color;
-		}
-
-		return $color . ' ' . $offset . '%';
+		return $color . ' ' . $offset;
 	}
 }

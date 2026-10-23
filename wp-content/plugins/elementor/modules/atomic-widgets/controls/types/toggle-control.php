@@ -13,7 +13,6 @@ class Toggle_Control extends Atomic_Control_Base {
 	private string $size = 'tiny';
 	private bool $exclusive = true;
 	private bool $convert_options = false;
-	private bool $allow_empty = false;
 
 	public function get_type(): string {
 		return 'toggle';
@@ -57,12 +56,6 @@ class Toggle_Control extends Atomic_Control_Base {
 		return $this;
 	}
 
-	public function set_allow_empty( bool $allow_empty ): self {
-		$this->allow_empty = $allow_empty;
-
-		return $this;
-	}
-
 	/**
 	 * Whether to convert the v3 options to v4 compatible
 	 *
@@ -82,7 +75,6 @@ class Toggle_Control extends Atomic_Control_Base {
 			'size' => $this->size,
 			'exclusive' => $this->exclusive,
 			'convertOptions' => $this->convert_options,
-			'allowEmpty' => $this->allow_empty,
 		];
 	}
 }

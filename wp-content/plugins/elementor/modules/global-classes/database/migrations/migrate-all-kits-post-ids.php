@@ -169,7 +169,12 @@ class Migrate_All_Kits_Post_IDs extends Base_Migration {
 				return null;
 			}
 
-			$created = $source_post->clone( $kit );
+			$created = Global_Class_Post::create(
+				$class_id,
+				$source_post->get_label(),
+				$source_post->get_data( true ),
+				$kit
+			);
 
 			if ( ! $created ) {
 				return null;

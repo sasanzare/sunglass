@@ -4,7 +4,6 @@ namespace Elementor\Modules\AtomicWidgets\Elements\Grid;
 use Elementor\Core\Breakpoints\Manager as Breakpoints_Manager;
 use Elementor\Modules\AtomicWidgets\Elements\Base\Atomic_Element_Base;
 use Elementor\Modules\AtomicWidgets\Elements\Base\Has_Element_Template;
-use Elementor\Modules\AtomicWidgets\Elements\Base\Html_Tag_Computer;
 use Elementor\Modules\AtomicWidgets\PropDependencies\Manager as Dependency_Manager;
 use Elementor\Modules\AtomicWidgets\PropTypes\Grid_Track_Size_Prop_Type;
 use Elementor\Modules\AtomicWidgets\PropTypes\Layout_Direction_Prop_Type;
@@ -31,8 +30,6 @@ class Grid extends Atomic_Element_Base {
 
 	const BASE_STYLE_KEY = 'base';
 
-	public static $widget_description = 'CSS grid layout. Always set grid-template-rows to match the actual number of rows the children fill. Empty fr row tracks do not collapse and render as an equal-height empty band below the content.';
-
 	public function __construct( $data = [], $args = null ) {
 		parent::__construct( $data, $args );
 		$this->meta( 'is_container', true );
@@ -51,15 +48,11 @@ class Grid extends Atomic_Element_Base {
 	}
 
 	public function get_keywords() {
-		return [ 'ato', 'atom', 'atoms', 'atomic', 'container', 'wrapper', 'section', 'row', 'column', 'grid', 'columns', 'gallery', 'layout' ];
+		return [ 'ato', 'atom', 'atoms', 'atomic', 'grid', 'layout' ];
 	}
 
 	public function get_icon() {
 		return 'eicon-library-grid';
-	}
-
-	public static function get_computed_html_tag( array $settings ): string {
-		return Html_Tag_Computer::compute( $settings, 'div' );
 	}
 
 	protected static function define_props_schema(): array {
@@ -88,7 +81,7 @@ class Grid extends Atomic_Element_Base {
 			'tag' => String_Prop_Type::make()
 				->enum( [ 'div', 'header', 'section', 'article', 'aside', 'footer', 'a', 'button' ] )
 				->default( 'div' )
-				->description( 'The HTML tag for the grid container. One of: div, header, section, article, aside, footer, a (link), or button.' )
+				->description( 'The HTML tag for the grid container. Could be div, header, section, article, aside, footer, or a (link).' )
 				->set_dependencies( $tag_dependencies ),
 			'link' => Link_Prop_Type::make(),
 			'attributes' => Attributes_Prop_Type::make()->meta( Overridable_Prop_Type::ignore() ),

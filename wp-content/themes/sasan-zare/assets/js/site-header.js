@@ -3,7 +3,8 @@
 
 	function initializeMobileMenu() {
 		var openButton = document.querySelector('[data-saz-menu-open]');
-		var dialog = document.getElementById('saz-mobile-menu');
+		var dialogId = openButton ? openButton.getAttribute('aria-controls') : '';
+		var dialog = dialogId ? document.getElementById(dialogId) : null;
 		var closeButton;
 
 		if (!openButton || !dialog || typeof dialog.showModal !== 'function') {

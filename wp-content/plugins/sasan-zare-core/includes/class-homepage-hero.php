@@ -68,6 +68,22 @@ final class Homepage_Hero {
 			'secondary_label'   => 'راهنمای انتخاب فریم',
 			'secondary_url'     => '',
 			'featured_product_id' => '',
+			'scene_caption'       => "CLEARER\nWORLD\nA BRIGHTER\nYOU",
+			'editorial_image'     => array(
+				'url' => plugin_dir_url( dirname( __DIR__ ) . '/sasan-zare-core.php' ) . 'assets/images/eyewear-frame-reference.png',
+				'id'  => 0,
+			),
+			'editorial_image_alt' => 'فریم طبی مشکی؛ تصویر الهام‌بخش استایل',
+			'editorial_title'     => 'عینک طبی مون‌بلانک',
+			'editorial_sku'       => 'Montblanc MB0340',
+			'editorial_link_label' => 'کشف فریم دلخواه شما',
+			'editorial_url'       => '',
+			'guide_eyebrow'       => 'فریمی برای چهرهٔ شما',
+			'guide_items'         => array(
+				array( 'title' => 'صورت گرد', 'description' => 'فریم‌های مستطیلی و زاویه‌دار به چهره تعادل و کشیدگی می‌دهند.' ),
+				array( 'title' => 'صورت زاویه‌دار', 'description' => 'فریم‌های گرد و بیضی، خطوط چهره را نرم‌تر نشان می‌دهند.' ),
+				array( 'title' => 'اندازه و راحتی', 'description' => 'عرض فریم را با عرض صورت هماهنگ کنید؛ پل عینک و دسته‌ها باید بدون فشار روی صورت قرار بگیرند.' ),
+			),
 			'benefits'          => array(
 				array(
 					'icon'        => 'truck',
@@ -133,6 +149,7 @@ final class Homepage_Hero {
 		$defaults = self::get_default_settings();
 		$settings = wp_parse_args( $settings, $defaults );
 		$settings['benefits'] = is_array( $settings['benefits'] ) ? $settings['benefits'] : array();
+		$settings['guide_items'] = is_array( $settings['guide_items'] ) ? $settings['guide_items'] : array();
 
 		$heading          = trim( (string) $settings['heading'] );
 		$highlight        = trim( (string) $settings['heading_highlight'] );
@@ -152,11 +169,33 @@ final class Homepage_Hero {
 		$guide_id         = $title_id . '-guide';
 		$show_guide       = '' === $secondary_url;
 		$secondary_url    = $show_guide ? '#' . $guide_id : $secondary_url;
-		$editorial_product_url = plugin_dir_url( dirname( __DIR__ ) . '/sasan-zare-core.php' ) . 'assets/images/eyewear-frame-reference.png';
+		$editorial_image_html = self::get_editorial_image_markup( $settings );
+		$editorial_url = '' !== trim( (string) $settings['editorial_url'] ) ? (string) $settings['editorial_url'] : $primary_url;
 
 		wp_enqueue_style( 'saz-core-homepage-hero' );
 		wp_enqueue_script( 'saz-core-homepage-hero' );
 		require __DIR__ . '/views/homepage-hero.php';
+	}
+
+	/**
+	 * Render the author-selected style-inspiration image independently of WooCommerce.
+	 *
+	 * @param array<string,mixed> $settings Widget settings.
+	 * @return string
+	 */
+	private static function get_editorial_image_markup( array $settings ): string {
+		$image = is_array( $settings['editorial_image'] ) ? $settings['editorial_image'] : array();
+		$id    = absint( $image['id'] ?? 0 );
+		$alt   = (string) $settings['editorial_image_alt'];
+		if ( $id > 0 ) {
+			if ( '' === trim( $alt ) ) {
+				$alt = (string) get_post_meta( $id, '_wp_attachment_image_alt', true );
+			}
+			return (string) wp_get_attachment_image( $id, 'medium_large', false, array( 'class' => 'saz-product-card__image', 'alt' => $alt, 'decoding' => 'async' ) );
+		}
+		$defaults = self::get_default_settings();
+		$url = ! empty( $image['url'] ) ? (string) $image['url'] : $defaults['editorial_image']['url'];
+		return sprintf( '<img class="saz-product-card__image" src="%s" alt="%s" width="1024" height="640" decoding="async">', esc_url( $url ), esc_attr( $alt ) );
 	}
 
 	/**

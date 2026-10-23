@@ -8,7 +8,6 @@ use Elementor\Modules\AtomicWidgets\PropTypes\Image_Prop_Type;
 use Elementor\Modules\AtomicWidgets\PropTypes\Link_Prop_Type;
 use Elementor\Modules\AtomicWidgets\Controls\Section;
 use Elementor\Modules\AtomicWidgets\Elements\Base\Atomic_Widget_Base;
-use Elementor\Modules\AtomicWidgets\Elements\Base\Html_Tag_Computer;
 use Elementor\Modules\AtomicWidgets\PropTypes\Attributes_Prop_Type;
 use Elementor\Modules\AtomicWidgets\Controls\Types\Image_Control;
 use Elementor\Modules\AtomicWidgets\Utils\Image\Placeholder_Image;
@@ -38,21 +37,11 @@ class Atomic_Image extends Atomic_Widget_Base {
 	}
 
 	public function get_keywords() {
-		return [ 'ato', 'atom', 'atoms', 'atomic', 'image', 'photo', 'picture' ];
+		return [ 'ato', 'atom', 'atoms', 'atomic' ];
 	}
 
 	public function get_icon() {
 		return 'eicon-e-image';
-	}
-
-	public static function html_tag_follows_link(): bool {
-		return false;
-	}
-
-	public static function get_computed_html_tag( array $settings ): string {
-		return Html_Tag_Computer::compute( $settings, 'img', [
-			Html_Tag_Computer::FOLLOW_LINK_OPTION => static::html_tag_follows_link(),
-		] );
 	}
 
 	protected static function define_props_schema(): array {

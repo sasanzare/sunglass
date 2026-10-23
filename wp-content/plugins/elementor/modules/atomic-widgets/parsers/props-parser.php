@@ -67,13 +67,7 @@ class Props_Parser {
 				continue;
 			}
 
-			$sanitized_value = $prop_type->sanitize( $props[ $key ] );
-
-			if ( ! $prop_type->should_persist( $sanitized_value ) ) {
-				continue;
-			}
-
-			$sanitized[ $key ] = $sanitized_value;
+			$sanitized[ $key ] = $prop_type->sanitize( $props[ $key ] );
 		}
 
 		return Parse_Result::make()->wrap( $sanitized );

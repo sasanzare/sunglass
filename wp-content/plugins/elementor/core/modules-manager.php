@@ -101,6 +101,7 @@ class Modules_Manager {
 			'favorites',
 			'admin-top-bar',
 			'element-manager',
+			'pro-free-trial-popup',
 			'nested-elements',
 			// Depends on Nested Elements module
 			'nested-tabs',
@@ -126,12 +127,10 @@ class Modules_Manager {
 			'content-sanitizer',
 			'atomic-widgets',
 			'global-classes',
-			'default-styles',
 			'variables',
 			'design-system-sync',
 			'wc-product-editor',
 			'checklist',
-			'audits',
 			'cloud-library',
 			'cloud-kit-library',
 			'atomic-opt-in',
@@ -141,7 +140,6 @@ class Modules_Manager {
 			'widget-creation',
 			'editor-one',
 			'markdown-render',
-			'agents',
 			'elementor-capabilities-mcp',
 			'assets-manager',
 		];
